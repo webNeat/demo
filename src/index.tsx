@@ -1,17 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { datadogRum } from "@datadog/browser-rum";
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import { App } from "./App";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+datadogRum.init({
+  applicationId: "xxx",
+  clientToken: "xxx",
+  trackViewsManually: true,
+  beforeSend: ({ type, view: { name, url } }) => {
+    if (type === "view") {
+      console.log({ name, url });
+    }
+  },
+});
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+datadogRum.startView("initial");
+
+ReactDOM.render(<App />, document.getElementById("root"));
